@@ -1,30 +1,55 @@
-INC_E_PAPER 	= ./lib/e-Paper
-INC_CONFIG  	= ./lib/config
-INC_GUI		= ./lib/GUI
-INC_FONTS	= ./lib/fonts
 
-DISPLAY_TYPE	= ./lib/e-Paper/EPD_2in7b.c
+SRC_DIR				= ./src/
+LIB_DIR				= $(SRC_DIR)lib/
+WEB_DIR				= $(SRC_DIR)web/
+LOG_DIR				= $(LIB_DIR)log/src/
+
+INC_E_PAPER 	= $(LIB_DIR)e-Paper/
+INC_CONFIG  	= $(LIB_DIR)config/
+INC_GUI				= $(LIB_DIR)GUI/
+INC_FONTS			= $(LIB_DIR)fonts/
+INC_DISPLAY			= $(SRC_DIR)display/
+INC_LOG				= $(LIB_DIR)/log/src
+
+DISPLAY_DIR		= $(SRC_DIR)display/
+
+
+INCLUDES 			= -I$(INC_FONTS) 
+INCLUDES 			+= -I$(INC_GUI)
+INCLUDES			+= -I$(INC_CONFIG)
+INCLUDES			+= -I$(INC_E_PAPER)
+INCLUDES			+= -I$(INC_DISPLAY)
+INCLUDES			+= -I$(INC_LOG)
+
+
+DISPLAY_TYPE	= $(LIB_DIR)e-Paper/EPD_2in7b.c
 USELIB_RPI 	= USE_LGPIO_LIB	
 
+SRC=		$(LIB_DIR)config/DEV_Config.c  
+#SRC+=$(LIB_DIR)config/dev_hardware_SPI.c  
+SRC+=$(LIB_DIR)fonts/font12CN.c  
+SRC+=$(LIB_DIR)fonts/font12.c  
+SRC+=$(LIB_DIR)fonts/font16.c 
+SRC+=$(LIB_DIR)fonts/font20.c
+SRC+=$(LIB_DIR)fonts/font24CN.c 
+SRC+=$(LIB_DIR)fonts/font24.c
+SRC+=$(LIB_DIR)fonts/font8.c
+SRC+=$(LIB_DIR)GUI/GUI_BMPfile.c 
+SRC+=$(LIB_DIR)GUI/GUI_Paint.c
 
-SRC=./lib/e-Paper/EPD_2in7b.c
-SRC+=./lib/config/DEV_Config.c  
-SRC+=./lib/config/dev_hardware_SPI.c  
-SRC+=./lib/fonts/font12CN.c  
-SRC+=./lib/fonts/font12.c  
-SRC+=./lib/fonts/font16.c 
-SRC+=./lib/fonts/font20.c
-SRC+=./lib/fonts/font24CN.c 
-SRC+=./lib/fonts/font24.c
-SRC+=./lib/fonts/font8.c
-SRC+=./lib/GUI/GUI_BMPfile.c 
-SRC+=./lib/GUI/GUI_Paint.c
-SRC+=./src/main.c
+SRC+=$(LOG_DIR)*.c
+SRC+=$(DISPLAY_DIR)*.c
+
+SRC+= $(SRC_DIR)*.c
 	
 
 all:
-	gcc -I $(INC_E_PAPER) -I $(INC_CONFIG) -I$(INC_GUI) -I$(INC_FONTS) -Wall -D DEBUG -D RPI -D USE_LGPIO_LIB -o focusmate  $(SRC)  -llgpio -lm
+	gcc $(INCLUDES) -Wall -D DEBUG -D RPI -D USE_LGPIO_LIB -D LOG_USE_COLOR -o focusmate  $(SRC)  -llgpio -lm
 
+run:
+	./focusmate
 
+clean:
+	rm focusmate
 
 

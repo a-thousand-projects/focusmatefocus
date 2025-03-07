@@ -375,14 +375,11 @@ Info:
 ******************************************************************************/
 UBYTE DEV_Module_Init(void)
 {
-    printf("/***********************************/ \r\n");
 	if(DEV_Equipment_Testing() < 0) {
 		return 1;
 	}
 #ifdef RPI
-	printf("Using -> RPI\r\n");
 #ifdef USE_BCM2835_LIB
-	printf("Using -> BCM2835\r\n");
 	if(!bcm2835_init()) {
 		printf("bcm2835 init failed  !!! \r\n");
 		return 1;
@@ -414,7 +411,6 @@ UBYTE DEV_Module_Init(void)
 	wiringPiSPISetup(0,10000000);
 	// wiringPiSPISetupMode(0, 32000000, 0);
 #elif  USE_LGPIO_LIB
-	printf("Using -> LGPIO");
     char buffer[NUM_MAXBUF];
     FILE *fp;
     fp = popen("cat /proc/cpuinfo | grep 'Raspberry Pi 5'", "r");
@@ -468,7 +464,6 @@ UBYTE DEV_Module_Init(void)
 #else
 	printf("NO HARDWARE TYPE DEFINED\r\n");
 #endif
-    printf("/***********************************/ \r\n");
 	return 0;
 }
 
